@@ -29,7 +29,8 @@ for i in range(len(mpii)):
     #     break
 
     mpii_inf = mpii[i]  # mpii_inf是mpii.json中第i个标注
-    # 必须要在for循环中定义coco.json文件中的两个字典，因为append()是浅复制，在for外面定义会导致被覆盖
+    # 必须要在for循环中定义coco.json文件中的两个字典，
+    # 因为append()是浅复制，在for外面定义会导致之前append的block内容被覆盖
     annot_block = {
         "category_id": 1,
         "bbox": [],
@@ -71,19 +72,19 @@ for i in range(len(mpii)):
     x = int(center[0] - w * 0.5)
     y = int(center[1] - h * 0.5)
     annot_block['bbox'].extend([x, y, w, h])
-
+#           ========================显示图片，可注释掉==============================
     img = cv2.imread(os.path.join(mpii_imgpath, images_block['file_name']))
     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
     for k in range(16):
         cv2.circle(img,((annot_block['keypoints'][k * 3]),int(annot_block['keypoints'][k * 3 + 1])),2,(0,255,0),3)
     cv2.imshow("img", img)
-
+    cv2.waitKey(0)
     # img = cv2.imread(''.join(mpii_imgpath,images_block['file_name']))
     # print(''.join(mpii_imgpath,images_block['file_name']))
     print(img.shape)
     print('center,scale: {}, {}({}), {}'.format(mpii_inf['center'][0], mpii_inf['center'][1], center[1], mpii_inf['scale']))
     print('xywh: {}, {}, {}, {}'.format(x, y, w, h))
-
+#           =============================写入文件=================================
     coco['annotations'].append(annot_block)
     coco['images'].append(images_block)
     cv2.waitKey(0)
