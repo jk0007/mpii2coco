@@ -87,7 +87,6 @@ for i in range(len(mpii)):
 #           =============================写入文件=================================
     coco['annotations'].append(annot_block)
     coco['images'].append(images_block)
-    cv2.waitKey(0)
 
 with open(writepath, 'w', encoding='utf-8') as f:
     json.dump(coco, f, indent=4)
