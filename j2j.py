@@ -6,10 +6,11 @@ from tqdm import tqdm
 # =======================================读取mpii标注=======================================
 
 mpiipath = "./annot/train.json"  # mpii train的地址
-# mpiipath = "./annot/valid.json"  # mpii valid的地址
 writepath = "./annotations/person_keypoints_mpii2coco_train.json"  # mpii转换成coco的地址(train)
-# writepath = "./annotations/person_keypoints_mpii2coco_val.json"  # mpii转换成coco的地址(val)
 p = 100000  # train
+
+# mpiipath = "./annot/valid.json"  # mpii valid的地址
+# writepath = "./annotations/person_keypoints_mpii2coco_val.json"  # mpii转换成coco的地址(val)
 # p = 200000  # val
 
 mpii_imgpath = "./mpii"  # mpii图片的地址
@@ -59,14 +60,6 @@ for i in tqdm(range(len(mpii))):
         "id": 0
     }
 
-    # ids = ''.join(a for a in mpii_inf['image'] if a in "0123456789")
-    # ids = int(ids)
-    # annot_block['id'] = ids
-    # annot_block['image_id'] = ids
-    # annot_block['num_keypoints'] = sum(mpii_inf['joints_vis'])
-    # images_block['file_name'] = mpii_inf['image']
-    # images_block['id'] = ids
-
     ids = ''.join(a for a in mpii_inf['image'] if a in "0123456789")
     ids = int(ids)
     annot_block['id'] = i + p
@@ -92,13 +85,7 @@ for i in tqdm(range(len(mpii))):
     w = w + 60
     h = h + 60
 
-#           ========================显示图片，可注释掉==============================
-
     img = cv2.imread(os.path.join(mpii_imgpath, images_block['file_name']))
-    # print(os.path.join(mpii_imgpath, images_block['file_name']))
-    # for k in range(16):
-    #     cv2.circle(img,((annot_block['keypoints'][k * 3]),int(annot_block['keypoints'][k * 3 + 1])),2,(0,255,0),3)
-
     imgh, imgw, ii = img.shape
     x = max(x, 0)
     y = max(y, 0)
@@ -108,6 +95,14 @@ for i in tqdm(range(len(mpii))):
     images_block['height'] = imgh
     images_block['width'] = imgw
     annot_block['area'] = imgh * imgw
+
+#           ========================显示图片，可注释掉==============================
+
+    # print(os.path.join(mpii_imgpath, images_block['file_name']))
+    # for k in range(16):
+    #     cv2.circle(img,((annot_block['keypoints'][k * 3]),int(annot_block['keypoints'][k * 3 + 1])),2,(0,255,0),3)
+
+
     # print(img.shape)
     # print('x1y1,x2y2: {}, {}, {}, {}'.format(x, y, x + w, y + h))
     # cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
