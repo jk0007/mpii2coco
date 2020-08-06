@@ -3,6 +3,7 @@ import cv2
 import os
 import numpy as np
 from tqdm import tqdm
+
 # =======================================读取mpii标注=======================================
 
 mpiipath = "./annot/train.json"  # mpii train的地址
@@ -32,8 +33,8 @@ coco = { # 定义coco标注的总字典，包含三个子字典
 
 # start = 1000
 # end = 2000
-for i in tqdm(range(len(mpii))):
 # for i in tqdm(range(start,end)):
+for i in tqdm(range(len(mpii))):
     mpii_inf = mpii[i]  # mpii_inf是mpii.json中第i个标注
     # 必须要在for循环中定义coco.json文件中的两个字典，
     # 因为append()是浅复制，在for外面定义会导致之前append的block内容被覆盖
@@ -59,16 +60,19 @@ for i in tqdm(range(len(mpii))):
         "width": 0,
         "id": 0
     }
+	
+#           ===========================id&image_id的转换============================
 
     ids = ''.join(a for a in mpii_inf['image'] if a in "0123456789")
     ids = int(ids)
-    annot_block['id'] = i + p
+    annot_block['id'] = i + p  # p:(see above)
     annot_block['image_id'] = ids
-    annot_block['num_keypoints'] = sum(mpii_inf['joints_vis'])
     images_block['file_name'] = mpii_inf['image']
     images_block['id'] = ids
+	
+	annot_block['num_keypoints'] = sum(mpii_inf['joints_vis'])
 
-#           ===========================keypoints/bbox的转换============================
+#           ===========================keypoints&bbox的转换============================
 
     landmarks = []
     for j in range(16):
